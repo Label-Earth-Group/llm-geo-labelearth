@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d2" for="node" attr.name="description" attr.type="string"/>
+<key id="d1" for="node" attr.name="path" attr.type="string"/>
+<key id="d0" for="node" attr.name="node_type" attr.type="string"/>
+<graph edgedefault="directed"><node id="haz_waste_shp_url">
+  <data key="d0">data</data>
+  <data key="d1">https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip</data>
+  <data key="d2">Hazardous waste facility shapefile URL</data>
+</node>
+<node id="load_haz_waste_shp">
+  <data key="d0">operation</data>
+  <data key="d2">Load hazardous waste facility shapefile</data>
+</node>
+<node id="haz_waste_gdf">
+  <data key="d0">data</data>
+  <data key="d2">Hazardous waste facility GeoDataFrame</data>
+</node>
+<node id="tract_shp_url">
+  <data key="d0">data</data>
+  <data key="d1">https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip</data>
+  <data key="d2">Tract boundary shapefile URL</data>
+</node>
+<node id="load_tract_shp">
+  <data key="d0">operation</data>
+  <data key="d2">Load tract boundary shapefile</data>
+</node>
+<node id="tract_gdf">
+  <data key="d0">data</data>
+  <data key="d2">Tract boundary GeoDataFrame</data>
+</node>
+<node id="pop_csv_url">
+  <data key="d0">data</data>
+  <data key="d1">https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv</data>
+  <data key="d2">Tract population CSV file URL</data>
+</node>
+<node id="load_pop_csv">
+  <data key="d0">operation</data>
+  <data key="d2">Load tract population CSV file</data>
+</node>
+<node id="pop_gdf">
+  <data key="d0">data</data>
+  <data key="d2">Tract population GeoDataFrame</data>
+</node>
+<node id="join">
+  <data key="d0">operation</data>
+  <data key="d2">Perform spatial join between tract and hazardous waste facility GeoDataFrames</data>
+</node>
+<node id="joined_gdf">
+  <data key="d0">data</data>
+  <data key="d2">Tract boundary GeoDataFrame with hazardous waste facility information</data>
+</node>
+<node id="pop_in_haz_tracts">
+  <data key="d0">operation</data>
+  <data key="d2">Compute population living in tracts with hazardous waste facilities</data>
+</node>
+<node id="pop_in_haz_tracts_result">
+  <data key="d0">data</data>
+  <data key="d2">Population living in tracts with hazardous waste facilities</data>
+</node>
+<node id="generate_map">
+  <data key="d0">operation</data>
+  <data key="d2">Generate population choropleth map</data>
+</node>
+<node id="map">
+  <data key="d0">data</data>
+  <data key="d2">Population choropleth map</data>
+</node>
+<node id="highlight_borders">
+  <data key="d0">operation</data>
+  <data key="d2">Highlight borders of tracts with hazardous waste facilities on the map</data>
+</node>
+<node id="highlighted_map">
+  <data key="d0">data</data>
+  <data key="d2">Map with highlighted borders of tracts with hazardous waste facilities</data>
+</node>
+<edge source="haz_waste_shp_url" target="load_haz_waste_shp"/>
+<edge source="load_haz_waste_shp" target="haz_waste_gdf"/>
+<edge source="haz_waste_gdf" target="join"/>
+<edge source="tract_shp_url" target="load_tract_shp"/>
+<edge source="load_tract_shp" target="tract_gdf"/>
+<edge source="tract_gdf" target="join"/>
+<edge source="pop_csv_url" target="load_pop_csv"/>
+<edge source="load_pop_csv" target="pop_gdf"/>
+<edge source="pop_gdf" target="pop_in_haz_tracts"/>
+<edge source="pop_gdf" target="generate_map"/>
+<edge source="join" target="joined_gdf"/>
+<edge source="joined_gdf" target="pop_in_haz_tracts"/>
+<edge source="joined_gdf" target="highlight_borders"/>
+<edge source="pop_in_haz_tracts" target="pop_in_haz_tracts_result"/>
+<edge source="generate_map" target="map"/>
+<edge source="map" target="highlight_borders"/>
+<edge source="highlight_borders" target="highlighted_map"/>
+</graph></graphml>

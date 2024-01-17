@@ -1,0 +1,477 @@
+2024-01-16 17:58:13,091 - test3 - stream_content - line:81 - INFO - 第一次返回：import networkx as nx
+
+G = nx.DiGraph()
+
+# Step 1: Load hazardous waste facility shapefile
+G.add_node("haz_waste_shp_url", node_type="data", data_path="https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip", description="Hazardous waste facility shapefile URL")
+G.add_node("load_haz_waste_shp", node_type="operation", description="Load hazardous waste facility shapefile")
+G.add_edge("haz_waste_shp_url", "load_haz_waste_shp")
+G.add_node("haz_waste_gdf", node_type="data", description="Hazardous waste facility GeoDataFrame")
+G.add_edge("load_haz_waste_shp", "haz_waste_gdf")
+
+# Step 2: Load tract boundary shapefile
+G.add_node("tract_boundary_shp_url", node_type="data", data_path="https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip", description="Tract boundary shapefile URL")
+G.add_node("load_tract_boundary_shp", node_type="operation", description="Load tract boundary shapefile")
+G.add_edge("tract_boundary_shp_url", "load_tract_boundary_shp")
+G.add_node("tract_boundary_gdf", node_type="data", description="Tract boundary GeoDataFrame")
+G.add_edge("load_tract_boundary_shp", "tract_boundary_gdf")
+
+# Step 3: Load tract population CSV file
+G.add_node("tract_population_csv_url", node_type="data", data_path="https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv", description="Tract population CSV file URL")
+G.add_node("load_tract_population_csv", node_type="operation", description="Load tract population CSV file")
+G.add_edge("tract_population_csv_url", "load_tract_population_csv")
+G.add_node("tract_population_df", node_type="data", description="Tract population DataFrame")
+G.add_edge("load_tract_population_csv", "tract_population_df")
+
+# Step 4: Spatial join to identify tracts with hazardous waste facilities
+G.add_node("spatial_join", node_type="operation", description="Spatial join to identify tracts with hazardous waste facilities")
+G.add_edge("haz_waste_gdf", "spatial_join")
+G.add_edge("tract_boundary_gdf", "spatial_join")
+G.add_node("tracts_with_haz_waste_gdf", node_type="data", description="Tracts with hazardous waste facilities GeoDataFrame")
+G.add_edge("spatial_join", "tracts_with_haz_waste_gdf")
+
+# Step 5: Calculate total population in tracts with hazardous waste facilities
+G.add_node("calculate_population", node_type="operation", description="Calculate total population in tracts with hazardous waste facilities")
+G.add_edge("tracts_with_haz_waste_gdf", "calculate_population")
+G.add_edge("tract_population_df", "calculate_population")
+G.add_node("total_population", node_type="data", description="Total population in tracts with hazardous waste facilities")
+G.add_edge("calculate_population", "total_population")
+
+# Step 6: Generate choropleth map of tract populations
+G.add_node("generate_population_map", node_type="operation", description="Generate choropleth map of tract populations")
+G.add_edge("tract_boundary_gdf", "generate_population_map")
+G.add_edge("tract_population_df", "generate_population_map")
+
+# Step 7: Highlight tracts with hazardous waste facilities on the map
+G.add_node("highlight_haz_waste_tracts", node_type="operation", description="Highlight tracts with hazardous waste facilities")
+G.add_edge("tracts_with_haz_waste_gdf", "highlight_haz_waste_tracts")
+G.add_edge("generate_population_map", "highlight_haz_waste_tracts")
+G.add_node("highlighted_map", node_type="data", description="Map with highlighted tracts")
+G.add_edge("highlight_haz_waste_tracts", "highlighted_map")
+
+# Step 8: Save the network as GraphML
+G.add_edge("total_population", "save_graphml")
+
+# Save the network as GraphML
+nx.write_graphml(G, "C:/Users/Administrator/Downloads/LLM-Geo-master/test/test.graphml")
+2024-01-16 18:00:57,936 - test3 - stream_content - line:81 - INFO - 第一次返回：import networkx as nx
+
+# Create a new graph
+G = nx.DiGraph()
+
+# Load hazardous waste facility shapefile
+G.add_node("haz_waste_shp_url", node_type="data", path="https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip", description="Hazardous waste facility shapefile URL")
+G.add_node("load_haz_waste_shp", node_type="operation", description="Load hazardous waste facility shapefile")
+G.add_edge("haz_waste_shp_url", "load_haz_waste_shp")
+G.add_node("haz_waste_gdf", node_type="data", description="Hazardous waste facility GeoDataFrame")
+G.add_edge("load_haz_waste_shp", "haz_waste_gdf")
+
+# Load tract boundary shapefile
+G.add_node("tract_shp_url", node_type="data", path="https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip", description="Tract boundary shapefile URL")
+G.add_node("load_tract_shp", node_type="operation", description="Load tract boundary shapefile")
+G.add_edge("tract_shp_url", "load_tract_shp")
+G.add_node("tract_gdf", node_type="data", description="Tract boundary GeoDataFrame")
+G.add_edge("load_tract_shp", "tract_gdf")
+
+# Load tract population CSV file
+G.add_node("pop_csv_url", node_type="data", path="https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv", description="Tract population CSV file URL")
+G.add_node("load_pop_csv", node_type="operation", description="Load tract population CSV file")
+G.add_edge("pop_csv_url", "load_pop_csv")
+G.add_node("pop_gdf", node_type="data", description="Tract population GeoDataFrame")
+G.add_edge("load_pop_csv", "pop_gdf")
+
+# Perform spatial join to find tracts with hazardous waste facilities
+G.add_node("join", node_type="operation", description="Perform spatial join between tract and hazardous waste facility GeoDataFrames")
+G.add_edge("tract_gdf", "join")
+G.add_edge("haz_waste_gdf", "join")
+G.add_node("joined_gdf", node_type="data", description="Tract boundary GeoDataFrame with hazardous waste facility information")
+G.add_edge("join", "joined_gdf")
+
+# Compute population living in tracts with hazardous waste facilities
+G.add_node("pop_in_haz_tracts", node_type="operation", description="Compute population living in tracts with hazardous waste facilities")
+G.add_edge("joined_gdf", "pop_in_haz_tracts")
+G.add_edge("pop_gdf", "pop_in_haz_tracts")
+G.add_node("pop_in_haz_tracts_result", node_type="data", description="Population living in tracts with hazardous waste facilities")
+G.add_edge("pop_in_haz_tracts", "pop_in_haz_tracts_result")
+
+# Generate population choropleth map
+G.add_node("generate_map", node_type="operation", description="Generate population choropleth map")
+G.add_edge("pop_gdf", "generate_map")
+G.add_node("map", node_type="data", description="Population choropleth map")
+G.add_edge("generate_map", "map")
+
+# Highlight borders of tracts with hazardous waste facilities on the map
+G.add_node("highlight_borders", node_type="operation", description="Highlight borders of tracts with hazardous waste facilities on the map")
+G.add_edge("joined_gdf", "highlight_borders")
+G.add_edge("map", "highlight_borders")
+G.add_node("highlighted_map", node_type="data", description="Map with highlighted borders of tracts with hazardous waste facilities")
+G.add_edge("highlight_borders", "highlighted_map")
+
+# Save the network as a GraphML file
+nx.write_graphml(G, "C:/Users/Administrator/Downloads/LLM-Geo-master/test/test.graphml")
+2024-01-16 18:00:57,978 - test3 - stream_content - line:94 - INFO - 第2次返回：<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+            
+            
+            
+            
+            
+
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "lightgreen", "description": "Hazardous waste facility shapefile URL", "id": "haz_waste_shp_url", "label": "haz_waste_shp_url", "node_type": "data", "path": "https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Load hazardous waste facility shapefile", "id": "load_haz_waste_shp", "label": "load_haz_waste_shp", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "orange", "description": "Hazardous waste facility GeoDataFrame", "id": "haz_waste_gdf", "label": "haz_waste_gdf", "node_type": "data", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Perform spatial join between tract and hazardous waste facility GeoDataFrames", "id": "join", "label": "join", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "lightgreen", "description": "Tract boundary shapefile URL", "id": "tract_shp_url", "label": "tract_shp_url", "node_type": "data", "path": "https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Load tract boundary shapefile", "id": "load_tract_shp", "label": "load_tract_shp", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "orange", "description": "Tract boundary GeoDataFrame", "id": "tract_gdf", "label": "tract_gdf", "node_type": "data", "shape": "dot", "size": 10}, {"color": "lightgreen", "description": "Tract population CSV file URL", "id": "pop_csv_url", "label": "pop_csv_url", "node_type": "data", "path": "https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Load tract population CSV file", "id": "load_pop_csv", "label": "load_pop_csv", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "orange", "description": "Tract population GeoDataFrame", "id": "pop_gdf", "label": "pop_gdf", "node_type": "data", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Compute population living in tracts with hazardous waste facilities", "id": "pop_in_haz_tracts", "label": "pop_in_haz_tracts", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Generate population choropleth map", "id": "generate_map", "label": "generate_map", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "orange", "description": "Tract boundary GeoDataFrame with hazardous waste facility information", "id": "joined_gdf", "label": "joined_gdf", "node_type": "data", "shape": "dot", "size": 10}, {"color": "deepskyblue", "description": "Highlight borders of tracts with hazardous waste facilities on the map", "id": "highlight_borders", "label": "highlight_borders", "node_type": "operation", "shape": "dot", "size": 10}, {"color": "violet", "description": "Population living in tracts with hazardous waste facilities", "id": "pop_in_haz_tracts_result", "label": "pop_in_haz_tracts_result", "node_type": "data", "shape": "dot", "size": 10}, {"color": "orange", "description": "Population choropleth map", "id": "map", "label": "map", "node_type": "data", "shape": "dot", "size": 10}, {"color": "violet", "description": "Map with highlighted borders of tracts with hazardous waste facilities", "id": "highlighted_map", "label": "highlighted_map", "node_type": "data", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "haz_waste_shp_url", "to": "load_haz_waste_shp", "width": 1}, {"arrows": "to", "from": "load_haz_waste_shp", "to": "haz_waste_gdf", "width": 1}, {"arrows": "to", "from": "haz_waste_gdf", "to": "join", "width": 1}, {"arrows": "to", "from": "tract_shp_url", "to": "load_tract_shp", "width": 1}, {"arrows": "to", "from": "load_tract_shp", "to": "tract_gdf", "width": 1}, {"arrows": "to", "from": "tract_gdf", "to": "join", "width": 1}, {"arrows": "to", "from": "pop_csv_url", "to": "load_pop_csv", "width": 1}, {"arrows": "to", "from": "load_pop_csv", "to": "pop_gdf", "width": 1}, {"arrows": "to", "from": "pop_gdf", "to": "pop_in_haz_tracts", "width": 1}, {"arrows": "to", "from": "pop_gdf", "to": "generate_map", "width": 1}, {"arrows": "to", "from": "join", "to": "joined_gdf", "width": 1}, {"arrows": "to", "from": "joined_gdf", "to": "pop_in_haz_tracts", "width": 1}, {"arrows": "to", "from": "joined_gdf", "to": "highlight_borders", "width": 1}, {"arrows": "to", "from": "pop_in_haz_tracts", "to": "pop_in_haz_tracts_result", "width": 1}, {"arrows": "to", "from": "generate_map", "to": "map", "width": 1}, {"arrows": "to", "from": "map", "to": "highlight_borders", "width": 1}, {"arrows": "to", "from": "highlight_borders", "to": "highlighted_map", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
+2024-01-16 18:01:02,785 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:01:13,150 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:01:29,974 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:01:42,135 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:01:52,477 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:02:07,750 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:02:19,918 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:02:30,287 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:03:01,910 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:03:12,259 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:03:31,694 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:03:43,886 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:04:19,830 - util - log_info - line:67 - INFO - error_code=context_length_exceeded error_message="This model's maximum context length is 4097 tokens. However, your messages resulted in 4146 tokens. Please reduce the length of the messages." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2024-01-16 18:04:30,341 - util - log_info - line:67 - INFO - error_code=context_length_exceeded error_message="This model's maximum context length is 4097 tokens. However, your messages resulted in 4146 tokens. Please reduce the length of the messages." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2024-01-16 18:04:40,857 - util - log_info - line:67 - INFO - error_code=context_length_exceeded error_message="This model's maximum context length is 4097 tokens. However, your messages resulted in 4146 tokens. Please reduce the length of the messages." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2024-01-16 18:04:51,210 - util - log_info - line:67 - INFO - error_code=rate_limit_exceeded error_message='Rate limit reached for gpt-3.5-turbo in organization org-AR0u0Y1qG0iUJm7oQsXi7fcd on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.' error_param=None error_type=requests message='OpenAI API error received' stream_error=False
+2024-01-16 18:05:01,727 - util - log_info - line:67 - INFO - error_code=context_length_exceeded error_message="This model's maximum context length is 4097 tokens. However, your messages resulted in 4146 tokens. Please reduce the length of the messages." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False
