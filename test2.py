@@ -30,7 +30,7 @@ save_dir = os.path.join(os.getcwd(), task_name)
 os.makedirs(save_dir, exist_ok=True)
 
 # create graph
-model=r"gpt-3.5-turbo-16k"
+model=r"gpt-4"
 solution = Solution(
                     task=TASK,
                     task_name=task_name,
@@ -66,6 +66,8 @@ nt.show(name=html_name)
 
 operations = solution.get_LLM_responses_for_operations(review=isReview)
 solution.save_solution()
+for operation in operations:
+    print(operation)
 
 all_operation_code_str = '\n'.join([operation['operation_code'] for operation in operations])
 

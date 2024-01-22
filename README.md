@@ -6,7 +6,7 @@ By adopting LLM as the reasoning core, we introduce Autonomous GIS, an AI-powere
 
 For two case studies, LLM-Geo successfully returned accurate results, including aggregated numbers, graphs, and maps, significantly reducing manual operation time. Although still lacking several important modules such as logging and code testing, LLM-Geo demonstrates a potential path towards next-generation AI-powered GIS. We advocate for the GIScience community to dedicate more effort to the research and development of autonomous GIS, making spatial analysis easier, faster, and more accessible to a broader audience. 
 
-![img_1.png](images/img_1.png)
+![img_1.png](data/images/img_1.png)
 Overall workflow of LLM-Geo
 
 Check out our preprint paper here: [Autonomous GIS: the next-generation AI-powered GIS](https://www.researchgate.net/publication/370635187_Autonomous_GIS_the_next-generation_AI-powered_GIS). Recommended citation format: Li Z., Ning H., 2023. Autonomous GIS: the next-generation AI-powered GIS. arXiv.2305.06453
@@ -51,7 +51,7 @@ Data locations:
 3. NC tract population CSV file location: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv. The population is stored in 'TotalPopulation' column. The tract ID column is 'GEOID'
 ```
 The results are: (a) Solution graph, (b) assembly program (Python codes), and (c) returned population count and generated map. 
-![img_2.png](images/img_2.png)
+![img_2.png](data/images/img_2.png)
 
 
 ## Case 2: Human mobility data retrieval and trend visualization.
@@ -66,10 +66,10 @@ Data locations:
 2. REST API URL with parameters for mobility data access: http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_for_all_places&source=twitter&scale=world_first_level_admin&begin=01/01/2020&end=12/31/2020. The response is in CSV format. There are three columns in the response: place, date (format:2020-01-07), and intra_movement. 'place' column is the administrative region code, France administrative regions start with 'FRA'.
 ```
 The results are: (a) Solution graph, (b) map matrix showing the spatial distribution of mobility change rate, (c) line chart showing the trend of the mobility change rate, (d) assembly program. 
-![img_2.png](images/img_3.png)
+![img_2.png](data/images/img_3.png)
 
 Note: The ODT explorer API needs to be woken up before being used. Simple open this URL: [http://gis.cas.sc.edu/GeoAnalytics/od.html](http://gis.cas.sc.edu/GeoAnalytics/od.html) in your browser, then fresh the webpage until you see the flows counts like bellow:
-![img.png](images/img_5.png) 
+![img.png](data/images/img_5.png) 
 
 ## Case 3: COVID-19 death rate analysis and visualization at the US county level.
 The spatial problem for this case is to investigate the spatial distribution of the COVID-19 death rate (ratio of COVID-19 deaths to cases) and the association between the death rate and the proportion of senior residents (age >=65) at the US county level. The death rate is derived from the accumulated COVID-19 data as of December 31, 2020, available from New York Times (2023), based on state and local health agency reports. The population data is extracted from the 2020 ACS five-year estimates (US Census Bureau 2022). The task asks for a map to show the county level death rate distribution and a scatter plot to show the correlation and trend line of the death rate with the senior resident rate. We input the task (question) to LLM-Geo as:
@@ -85,7 +85,7 @@ Data locations:
 
 ```
 The results are: (a) Solution graph, (b) county level death rate map of the contiguous US, (c) scatter plot showing the association between COVID-19 death rate and the senior resident rate at the county level, (d) assembly program.  
-![img_6.png](images/img_6.png)
+![img_6.png](data/images/img_6.png)
 
 # To Do
 - Add more case studies.
